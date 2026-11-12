@@ -1,0 +1,47 @@
+# Лабораторная №4 — SDN / OpenFlow / ODL
+# Студент: zakourcev, ИСУ: 408637, N=37
+name: zakourcev-l4
+
+mgmt:
+  network: clab-zakourcev-l4
+  ipv4-subnet: 10.104.37.0/24
+
+topology:
+  kinds:
+    linux:
+      image: lab-tools:1.0
+
+  nodes:
+    odl:
+      kind: linux
+      image: odl:chromium
+      mgmt-ipv4: 10.104.37.100
+    s1:
+      kind: linux
+      image: ovs-lab:latest
+      mgmt-ipv4: 10.104.37.11
+    s2:
+      kind: linux
+      image: ovs-lab:latest
+      mgmt-ipv4: 10.104.37.12
+    h1:
+      kind: linux
+      exec:
+        - "ethtool -K eth1 tx off"
+        - "ip addr add 10.37.4.1/24 dev eth1"
+    h2:
+      kind: linux
+      exec:
+        - "ethtool -K eth1 tx off"
+        - "ip addr add 10.37.4.2/24 dev eth1"
+    h3:
+      kind: linux
+      exec:
+        - "ethtool -K eth1 tx off"
+        - "ip addr add 10.37.4.3/24 dev eth1"
+
+  links:
+    - endpoints: ["h1:eth1", "s1:eth1"]
+    - endpoints: ["s1:eth2", "s2:eth2"]
+    - endpoints: ["h2:eth1", "s2:eth1"]
+    - endpoints: ["h3:eth1", "s2:eth3"]

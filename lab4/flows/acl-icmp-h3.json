@@ -1,0 +1,36 @@
+{
+  "flow-node-inventory:flow": [
+    {
+      "id": "zakourcev-acl-icmp-h3",
+      "table_id": 0,
+      "priority": 537,
+      "match": {
+        "in-port": "openflow:1:1",
+        "ethernet-match": {
+          "ethernet-type": {
+            "type": 2048
+          }
+        },
+        "ip-match": {
+          "ip-protocol": 1
+        },
+        "ipv4-destination": "10.37.4.3/32"
+      },
+      "instructions": {
+        "instruction": [
+          {
+            "order": 0,
+            "apply-actions": {
+              "action": [
+                {
+                  "order": 0,
+                  "drop-action": {}
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

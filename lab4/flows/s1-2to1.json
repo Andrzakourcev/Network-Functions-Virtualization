@@ -1,0 +1,29 @@
+{
+  "flow-node-inventory:flow": [
+    {
+      "id": "zakourcev-s1-2to1",
+      "table_id": 0,
+      "priority": 200,
+      "match": {
+        "in-port": "openflow:1:2"
+      },
+      "instructions": {
+        "instruction": [
+          {
+            "order": 0,
+            "apply-actions": {
+              "action": [
+                {
+                  "order": 0,
+                  "output-action": {
+                    "output-node-connector": "1"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
