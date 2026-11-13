@@ -1,0 +1,44 @@
+name: zakourcev-l5
+
+mgmt:
+  network: clab-zakourcev-l5
+  ipv4-subnet: 10.105.37.0/24
+
+topology:
+  kinds:
+    sonic-vs:
+      image: sonic-course:202511
+    mikrotik_chr:
+      image: mikrotik/chr:7.23.8
+    linux:
+      image: lab-tools:1.0
+
+  nodes:
+    dc1: {kind: sonic-vs}
+    hq:  {kind: mikrotik_chr}
+    br:  {kind: mikrotik_chr}
+    srv1:
+      kind: linux
+      exec:
+        - ip addr add 10.37.100.10/24 dev eth1
+        - ip route replace default via 10.37.100.1 dev eth1
+    pcb:
+      kind: linux
+      exec:
+        - ip addr add 10.37.200.10/24 dev eth1
+        - ip route replace default via 10.37.200.1 dev eth1
+    isp:
+      kind: linux
+      cmd: python3 -u -m http.server 80 # «интернет-сервис», журнал запросов — в docker logs
+      exec:
+        - ip addr add 100.64.1.1/30 dev eth1
+        - ip addr add 100.64.2.1/30 dev eth2
+        - ip addr add 198.51.100.1/32 dev lo
+        - sysctl -w net.ipv4.ip_forward=1
+
+  links:
+    - endpoints: ["srv1:eth1", "dc1:eth1"] # dc1 Ethernet0
+    - endpoints: ["dc1:eth2", "hq:ether2"] # dc1 Ethernet4 <-> hq ether2
+    - endpoints: ["hq:ether3", "isp:eth1"] # WAN головного офиса
+    - endpoints: ["br:ether2", "isp:eth2"] # WAN филиала
+    - endpoints: ["br:ether3", "pcb:eth1"] # LAN филиала

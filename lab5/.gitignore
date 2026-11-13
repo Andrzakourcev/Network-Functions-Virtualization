@@ -1,0 +1,10 @@
+*.img
+*.qcow2
+*.gz
+*.zip
+.env
+.env.*
+*private-key*
+*secret*
+clab-*/
+lab5_starter_zakourcev/

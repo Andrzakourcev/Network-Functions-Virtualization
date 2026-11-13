@@ -1,0 +1,3 @@
+#!/bin/sh
+# В docker-sonic-vs нет sudo: CLI SONiC вызывает "sudo <cmd>", выполняем команду напрямую
+exec "$@"
