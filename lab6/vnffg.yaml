@@ -18,4 +18,4 @@ vnfs:
 # Цепочки: от кого, к кому и через какие VNF
 chains:
   - {name: "${STUDENT}-c1", from: client1, to: server, path: [fw1, shaper1]}
-  - {name: "${STUDENT}-c2", from: client2, to: server, path: [fw1, shaper1]}
+  - {name: "${STUDENT}-c2", from: client2, to: server, path: [fw2, shaper1]}
