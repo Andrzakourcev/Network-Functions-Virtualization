@@ -1,0 +1,20 @@
+# Состояние Containerlab и временные файлы
+clab-*/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+.env
+.env.*
+
+# Скриншоты хранятся отдельно от GitHub
+screenshots/
+*.png
+*.jpg
+*.jpeg
+
+# Крупные образы и архивы
+*.img
+*.qcow2
+*.gz
+*.zip

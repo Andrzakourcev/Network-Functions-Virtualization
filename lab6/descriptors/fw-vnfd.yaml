@@ -1,0 +1,15 @@
+# Упрощённый дескриптор VNF (по мотивам ETSI NFV SOL001/TOSCA) — VNF «межсетевой экран»
+vnfd:
+  id: vnf-fw
+  provider: "zakourcev"
+  version: "1.0"
+  description: "Прозрачный межсетевой экран (bridge + nftables), вставляется в разрыв"
+  sw_image: lab-tools:1.0          # образ (VDU)
+  vdu:
+    resources: {vcpu: 1, memory_mb: 64}
+  ext_cp:                          # внешние точки подключения
+    - {id: cp-in,  iface: eth1, role: "сторона клиентов"}
+    - {id: cp-out, iface: eth2, role: "сторона сервера"}
+  config: vnf/fw-rules.nft         # day-1 конфигурация
+  scaling: {min_instances: 1, max_instances: 2}
+  lcm_operations: [instantiate, configure, scale_out, heal, terminate]

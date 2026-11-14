@@ -1,0 +1,21 @@
+# Описание сервисных цепочек (VNF Forwarding Graph) — упрощённый аналог ETSI VNFFGD.
+# Переменные ${N} и ${STUDENT} подставляются из окружения.
+controller: {url: "http://10.106.${N}.100:8181", user: admin, password: admin}
+switch: "openflow:1"
+
+# Конечные точки: номер порта OpenFlow на OVS и IP-адрес
+endpoints:
+  client1: {port: 1, ip: "10.${N}.6.11"}
+  client2: {port: 2, ip: "10.${N}.6.12"}
+  server:  {port: 9, ip: "10.${N}.6.100"}
+
+# Экземпляры VNF: порт входа (со стороны клиентов) и выхода (со стороны сервера)
+vnfs:
+  fw1:     {type: fw,     in: 3, out: 4}
+  fw2:     {type: fw,     in: 5, out: 6}     # появится после scale-out (этап 4)
+  shaper1: {type: shaper, in: 7, out: 8}
+
+# Цепочки: от кого, к кому и через какие VNF
+chains:
+  - {name: "${STUDENT}-c1", from: client1, to: server, path: [fw1, shaper1]}
+  - {name: "${STUDENT}-c2", from: client2, to: server, path: [fw1, shaper1]}

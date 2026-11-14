@@ -1,0 +1,45 @@
+name: ${STUDENT:=ivanov}-l6
+
+mgmt:
+  network: clab-${STUDENT:=ivanov}-l6
+  ipv4-subnet: 10.106.${N:=0}.0/24
+
+topology:
+  kinds:
+    linux:
+      image: lab-tools:1.0
+
+  nodes:
+    odl:
+      kind: linux
+      image: odl:chromium
+      mgmt-ipv4: 10.106.${N:=0}.100
+    sw:
+      kind: linux
+      image: ovs-lab:latest
+      mgmt-ipv4: 10.106.${N:=0}.10
+    client1:
+      kind: linux
+      exec: ["ethtool -K eth1 tx off", "ip addr add 10.${N:=0}.6.11/24 dev eth1"]
+    client2:
+      kind: linux
+      exec: ["ethtool -K eth1 tx off", "ip addr add 10.${N:=0}.6.12/24 dev eth1"]
+    server:
+      kind: linux
+      cmd: python3 -u -m http.server 80
+      exec: ["ethtool -K eth1 tx off", "ip addr add 10.${N:=0}.6.100/24 dev eth1"]
+    fw1:
+      kind: linux
+      labels: {vnf-type: fw}
+    shaper1:
+      kind: linux
+      labels: {vnf-type: shaper}
+
+  links:
+    - endpoints: ["client1:eth1", "sw:eth1"]
+    - endpoints: ["client2:eth1", "sw:eth2"]
+    - endpoints: ["fw1:eth1", "sw:eth3"]
+    - endpoints: ["fw1:eth2", "sw:eth4"]
+    - endpoints: ["shaper1:eth1", "sw:eth7"]
+    - endpoints: ["shaper1:eth2", "sw:eth8"]
+    - endpoints: ["server:eth1", "sw:eth9"]
